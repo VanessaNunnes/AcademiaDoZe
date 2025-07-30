@@ -1,4 +1,5 @@
-﻿namespace AcademiaDoZe.Domain.Entities;
+﻿//Vanessa Furtado Nunes
+namespace AcademiaDoZe.Domain.Entities;
 
 public class Acesso : Entity
 {

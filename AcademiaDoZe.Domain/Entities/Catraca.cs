@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AcademiaDoZe.Domain.Entities
-{
+﻿//Vanessa Furtado Nunes
+namespace AcademiaDoZe.Domain.Entities;
 	public class Catraca : Entity
 	{
 		public Catraca(Pessoa pessoa, DateTime dataHora)
@@ -23,4 +17,3 @@ namespace AcademiaDoZe.Domain.Entities
 		public Pessoa Pessoa { get; set; }
 		public DateTime DataHora { get; set; }
 	}
-}

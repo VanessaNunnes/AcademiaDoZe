@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿//Vanessa Furtado Nunes
+using System.ComponentModel.DataAnnotations;
 
 namespace AcademiaDoZe.Domain.Enums;
 

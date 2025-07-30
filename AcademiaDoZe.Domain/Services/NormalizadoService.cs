@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿//Vanessa Furtado Nunes
+using System.Text.RegularExpressions;
 
 namespace AcademiaDoZe.Domain.Services
 {

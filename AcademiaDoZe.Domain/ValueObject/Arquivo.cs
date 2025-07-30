@@ -1,4 +1,5 @@
-﻿namespace AcademiaDoZe.Domain.ValueObject;
+﻿//Vanessa Furtado Nunes
+namespace AcademiaDoZe.Domain.ValueObject;
 
 public record Arquivo
 {

@@ -1,4 +1,5 @@
-﻿namespace AcademiaDoZe.Domain.Exceptions;
+﻿//Vanessa Furtado Nunes
+namespace AcademiaDoZe.Domain.Exceptions;
 
 public class DomainException : Exception
 {

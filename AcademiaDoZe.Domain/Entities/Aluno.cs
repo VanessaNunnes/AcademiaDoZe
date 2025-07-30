@@ -1,4 +1,5 @@
-﻿using AcademiaDoZe.Domain.ValueObject;
+﻿//Vanessa Furtado Nunes
+using AcademiaDoZe.Domain.ValueObject;
 
 namespace AcademiaDoZe.Domain.Entities;
 

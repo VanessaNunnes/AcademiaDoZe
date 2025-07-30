@@ -1,7 +1,4 @@
-﻿using AcademiaDoZe.Domain.Exceptions;
-using AcademiaDoZe.Domain.Services;
-using System.Runtime.ConstrainedExecution;
-
+﻿//Vanessa Furtado Nunes
 namespace AcademiaDoZe.Domain.Entities;
 
 public sealed class Logradouro : Entity
