@@ -37,5 +37,41 @@ public abstract class Pessoa : Entity
         Complemento = complemento;
         Senha = senha;
         Foto = foto;
-    }
+
+		if (string.IsNullOrWhiteSpace(cpf))
+			throw new ArgumentException("CPF não pode ser vazio.", nameof(cpf));
+		if (string.IsNullOrWhiteSpace(nome))
+			throw new ArgumentException("Nome não pode ser vazio.", nameof(nome));
+		if (dataNascimento == default)
+			throw new ArgumentException("Data de nascimento não pode ser nula.", nameof(dataNascimento));
+		if (string.IsNullOrWhiteSpace(telefone))
+			throw new ArgumentException("Telefone não pode ser vazio.", nameof(telefone));
+		if (string.IsNullOrWhiteSpace(senha))
+			throw new ArgumentException("Senha não pode ser vazia.", nameof(senha));
+		if (endereco is null)
+			throw new ArgumentNullException(nameof(endereco), "Endereço não pode ser nulo.");
+		if (string.IsNullOrWhiteSpace(numero))
+			throw new ArgumentException("Número não pode ser vazio.", nameof(numero));
+	}
+
+	public virtual int Idade()
+	{
+		var hoje = DateOnly.FromDateTime(DateTime.Today);
+		var idade = hoje.Year - DataNascimento.Year;
+
+		if (hoje.Month < DataNascimento.Month || (hoje.Month == DataNascimento.Month && hoje.Day < DataNascimento.Day))
+			idade--;
+
+		return idade;
+	}
+
+	public virtual void Entrar()
+	{
+		var registro = new Catraca(this, DateTime.Now);
+	}
+
+	public virtual void Sair()
+	{
+		var registro = new Catraca(this, DateTime.Now);
+	}
 }

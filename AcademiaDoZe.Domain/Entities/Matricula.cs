@@ -10,7 +10,7 @@ public class Matricula : Entity
     public DateOnly DataInicio { get; private set; }
     public DateOnly DataFim { get; private set; }
     public string Objetivo { get; private set; }
-    public EMatriculaRestricoes RestricoesMedicas { get; private set; }
+    public EMatriculaRestricoes? RestricoesMedicas { get; private set; }
     public string ObservacoesRestricoes { get; private set; }
     public Arquivo LaudoMedico { get; private set; }
     public Matricula(Aluno alunoMatricula,
@@ -18,7 +18,7 @@ public class Matricula : Entity
     DateOnly dataInicio,
     DateOnly dataFim,
     string objetivo,
-    EMatriculaRestricoes restricoesMedicas,
+    EMatriculaRestricoes? restricoesMedicas,
     Arquivo laudoMedico)
 
     : base()
@@ -30,5 +30,26 @@ public class Matricula : Entity
         Objetivo = objetivo;
         RestricoesMedicas = restricoesMedicas;
         LaudoMedico = laudoMedico;
-    }
+
+		if (alunoMatricula is null)
+			throw new ArgumentNullException(nameof(alunoMatricula));
+
+		if (dataInicio == default || dataFim == default)
+			throw new ArgumentException("Data de início e fim não podem ser nulas.", nameof(dataInicio));
+
+		if (dataInicio > dataFim)
+			throw new ArgumentException("Data de início não pode ser maior que a data de fim.", nameof(dataInicio));
+
+		if (string.IsNullOrWhiteSpace(objetivo))
+			throw new ArgumentException("Objetivo não pode ser vazio.", nameof(objetivo));
+
+		if (alunoMatricula.Idade() < 12)
+			throw new InvalidOperationException("Aluno deve ter pelo menos 12 anos para se matricular.");
+
+		if (alunoMatricula.Idade() < 17 && laudoMedico is null)
+			throw new InvalidOperationException("Aluno menor de 17 anos deve possuir laudo medico para ser cadastrado.");
+
+		if (restricoesMedicas.HasValue && restricoesMedicas.Value != EMatriculaRestricoes.None && laudoMedico is null)
+			throw new InvalidOperationException("Aluno com restrições deve possuir um laudo médico.");
+	}
 }
