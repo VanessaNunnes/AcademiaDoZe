@@ -1,4 +1,5 @@
 ﻿//Vanessa Furtado Nunes
+using AcademiaDoZe.Domain.Exceptions;
 using AcademiaDoZe.Domain.ValueObject;
 
 namespace AcademiaDoZe.Domain.Entities;
@@ -40,19 +41,19 @@ public abstract class Pessoa : Entity
         Foto = foto;
 
 		if (string.IsNullOrWhiteSpace(cpf))
-			throw new ArgumentException("CPF não pode ser vazio.", nameof(cpf));
+			throw new DomainException("CPF não pode ser vazio.");
 		if (string.IsNullOrWhiteSpace(nome))
-			throw new ArgumentException("Nome não pode ser vazio.", nameof(nome));
+			throw new DomainException("Nome não pode ser vazio.");
 		if (dataNascimento == default)
-			throw new ArgumentException("Data de nascimento não pode ser nula.", nameof(dataNascimento));
+			throw new DomainException("Data de nascimento não pode ser nula.");
 		if (string.IsNullOrWhiteSpace(telefone))
-			throw new ArgumentException("Telefone não pode ser vazio.", nameof(telefone));
+			throw new DomainException("Telefone não pode ser vazio.");
 		if (string.IsNullOrWhiteSpace(senha))
-			throw new ArgumentException("Senha não pode ser vazia.", nameof(senha));
+			throw new DomainException("Senha não pode ser vazia.");
 		if (endereco is null)
-			throw new ArgumentNullException(nameof(endereco), "Endereço não pode ser nulo.");
+			throw new DomainException("Endereco não pode ser nulo.");
 		if (string.IsNullOrWhiteSpace(numero))
-			throw new ArgumentException("Número não pode ser vazio.", nameof(numero));
+			throw new DomainException("Número não pode ser vazio.");
 	}
 
 	public virtual int Idade()
@@ -66,13 +67,13 @@ public abstract class Pessoa : Entity
 		return idade;
 	}
 
-	public virtual void Entrar()
+	public virtual Catraca Entrar()
 	{
-		var registro = new Catraca(this, DateTime.Now);
+		return Catraca.Criar(this, DateTime.Now, 0);
 	}
 
-	public virtual void Sair()
+	public virtual Catraca Sair()
 	{
-		var registro = new Catraca(this, DateTime.Now);
+		return Catraca.Criar(this, DateTime.Now, 0);
 	}
 }

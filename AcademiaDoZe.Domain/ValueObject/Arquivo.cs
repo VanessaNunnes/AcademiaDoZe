@@ -1,4 +1,7 @@
 ﻿//Vanessa Furtado Nunes
+using AcademiaDoZe.Domain.Exceptions;
+using AcademiaDoZe.Domain.Services;
+
 namespace AcademiaDoZe.Domain.ValueObject;
 
 public record Arquivo
@@ -8,4 +11,21 @@ public record Arquivo
     {
         Conteudo = conteudo;
     }
+
+	public static Arquivo Criar(byte[] conteudo, string tipoArquivo)
+	{
+		if (conteudo == null || conteudo.Length == 0)
+			throw new DomainException("ARQUIVO_VAZIO");
+		if (TextoNormalizadoService.TextoVazioOuNulo(tipoArquivo))
+			throw new DomainException("ARQUIVO_TIPO_OBRIGATORIO");
+		var tiposPermitidos = new[] { ".jpg", ".jpeg", ".png", ".pdf", ".docx" };
+		if (!tiposPermitidos.Contains(tipoArquivo.ToLower()))
+			throw new DomainException("ARQUIVO_TIPO_INVALIDO");
+		const int tamanhoMaximoBytes = 5 * 1024 * 1024; 
+		if (conteudo.Length > tamanhoMaximoBytes)
+			throw new DomainException("ARQUIVO_TIPO_TAMANHO");
+
+		return new Arquivo(conteudo);
+
+	}
 }

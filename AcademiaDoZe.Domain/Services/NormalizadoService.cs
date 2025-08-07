@@ -13,7 +13,9 @@ namespace AcademiaDoZe.Domain.Services
         public static string ParaMaiusculo(string? texto) => string.IsNullOrEmpty(texto) ? string.Empty : texto.ToUpperInvariant();
         // Manter somente digitos numericos
         public static string LimparEDigitos(string? texto) => string.IsNullOrEmpty(texto) ? string.Empty : new string([.. texto.Where(char.IsDigit)]);
-        [GeneratedRegex(@"\s+")]
+		public static bool TextoVazioOuNulo(string? texto) => string.IsNullOrWhiteSpace(texto);
+
+		[GeneratedRegex(@"\s+")]
         private static partial Regex EspacosRegex();
     }
 }
