@@ -168,13 +168,13 @@ namespace AcademiaDoZe.Infrastructure_.Repositories
 				nome: reader["nome"].ToString()!,
 				dataNascimento: DateOnly.FromDateTime(Convert.ToDateTime(reader["nascimento"])),
 				email: reader["email"].ToString()!,
-				endereco: logradouro,
+				logradouro: logradouro,
 				numero: reader["numero"].ToString()!,
 				complemento: reader["complemento"]?.ToString(),
 				senha: reader["senha"].ToString()!,
 				foto: reader["foto"] is DBNull ? null : Arquivo.Criar((byte[])reader["foto"], "jpg"),
 				dataAdmissao: DateOnly.FromDateTime(Convert.ToDateTime(reader["admissao"])),
-				tipo: (EColaboradorTipo)Convert.ToInt32(reader["tipo"]),
+				tipoColaborador: (EColaboradorTipo)Convert.ToInt32(reader["tipo"]),
 				vinculo: (EColaboradorVinculo)Convert.ToInt32(reader["vinculo"])
 				);
 				// Define o ID usando reflection

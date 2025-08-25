@@ -14,6 +14,7 @@ namespace AcademiaDoZe.Domain.Repositories
 		Task<IEnumerable<Matricula>> ObterPorAluno(int alunoId);
 
 		Task<IEnumerable<Matricula>> ObterAtivas();
+		
 		Task<IEnumerable<Matricula>> ObterVencendoEmDias(int dias);
 	}
 }

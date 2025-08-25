@@ -110,8 +110,8 @@ namespace AcademiaDoZe.Infrastructure_.Repositories
 			try
 			{
 				var logradouro = Logradouro.Criar(
-				cep: reader["cep"].ToString()!,
-				nome: reader["nome"].ToString()!,
+				cEP: reader["cep"].ToString()!,
+				nomeLogradouro: reader["nome"].ToString()!,
 				bairro: reader["bairro"].ToString()!,
 				cidade: reader["cidade"].ToString()!,
 				estado: reader["estado"].ToString()!,
