@@ -10,15 +10,19 @@ public class Matricula : Entity
     public Aluno AlunoMatricula { get; private set; }
     public EMatriculaPlano Plano { get; private set; }
     public DateOnly DataInicio { get; private set; }
-    public DateOnly DataFim { get; private set; }
+    public DateOnly? DataFim { get; private set; }
     public string Objetivo { get; private set; }
     public EMatriculaRestricoes? RestricoesMedicas { get; private set; }
     public string ObservacoesRestricoes { get; private set; }
     public Arquivo LaudoMedico { get; private set; }
-    public Matricula(Aluno alunoMatricula,
+
+	public Colaborador? Colaborador { get; set; }
+	public int ColaboradorId => Colaborador?.Id ?? 0;
+
+	public Matricula(Aluno alunoMatricula,
     EMatriculaPlano plano,
     DateOnly dataInicio,
-    DateOnly dataFim,
+    DateOnly? dataFim,
     string objetivo,
     EMatriculaRestricoes? restricoesMedicas,
     Arquivo laudoMedico)
@@ -55,15 +59,22 @@ public class Matricula : Entity
 			throw new InvalidOperationException("Aluno com restrições deve possuir um laudo médico.");
 	}
 
-	public static Matricula Criar(Aluno aluno, EMatriculaPlano plano, DateOnly dataInicio, DateOnly dataFim, string objetivo, EMatriculaRestricoes? restricoes, Arquivo? laudo)
+	public static Matricula Criar(
+	Aluno aluno,
+	EMatriculaPlano plano,
+	DateOnly dataInicio,
+	DateOnly? dataFim,
+	string objetivo,
+	EMatriculaRestricoes? restricoes,
+	Arquivo? laudo)
 	{
 		if (aluno is null)
 			throw new DomainException(nameof(aluno));
 
-		if (dataInicio == default || dataFim == default)
+		if (dataInicio == default || !dataFim.HasValue)
 			throw new DomainException("Data de início e fim não podem ser nulas.");
 
-		if (dataInicio > dataFim)
+		if (dataInicio > dataFim.Value)
 			throw new DomainException("Data de início não pode ser maior que a data de fim.");
 
 		if (string.IsNullOrWhiteSpace(objetivo))
@@ -80,4 +91,5 @@ public class Matricula : Entity
 
 		return new Matricula(aluno, plano, dataInicio, dataFim, objetivo, restricoes, laudo);
 	}
+
 }

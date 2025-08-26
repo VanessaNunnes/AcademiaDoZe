@@ -11,6 +11,7 @@ public class Colaborador : Pessoa
 	public EColaboradorTipo Tipo { get; private set; }
 	public EColaboradorVinculo Vinculo { get; private set; }
 
+
 	public Colaborador(string nomeCompleto,
 	string cpf,
 	DateOnly dataNascimento,
@@ -113,8 +114,8 @@ public class Colaborador : Pessoa
 			throw new DomainException("Somente atendentes e administradores podem cadastrar alunos.");
 		try
 		{
-			var novoAluno = Aluno.Criar(cpf, nome, dataNascimento, email, telefone,
-				senha, foto, logradouro, numero, complemento ?? "");
+			var novoAluno = Aluno.Criar(nome, cpf, dataNascimento, telefone, email,
+				 logradouro, numero, complemento ?? "", senha, foto);
 
 			return novoAluno;
 		}

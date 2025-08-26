@@ -17,9 +17,9 @@ namespace AcademiaDoZe.Infrastructure.Tests
 			Logradouro? logradouro = await repoLogradouroObterPorId.ObterPorId(logradouroId);
 			// cria um arquivo de exemplo
 
-			Arquivo arquivo = Arquivo.Criar(new byte[] { 1, 2, 3 }, "jpg");
+			Arquivo arquivo = Arquivo.Criar(new byte[] { 1, 2, 3 });
 
-			var _cpf = "12345678900";
+			var _cpf = "12345678980";
 			// verifica se cpf já existe
 
 			var repoColaboradorCpf = new ColaboradorRepository(ConnectionString, DatabaseType);
@@ -52,43 +52,41 @@ namespace AcademiaDoZe.Infrastructure.Tests
 		[Fact]
 		public async Task Colaborador_ObterPorCpf_Atualizar()
 		{
-			var _cpf = "12345678900";
-			Arquivo arquivo = Arquivo.Criar(new byte[] { 1, 2, 3 }, "jpg");
-
-			var repoColaborador = new ColaboradorRepository(ConnectionString, DatabaseType);
-			var colaboradorExistente = await repoColaborador.ObterPorCpf(_cpf);
+			var _cpf = "12345678980";
+			Arquivo arquivo = Arquivo.Criar(new byte[] { 1, 2, 3 });
+			var repoColaboradorObterPorCpf = new ColaboradorRepository(ConnectionString, DatabaseType);
+			var colaboradorExistente = await repoColaboradorObterPorCpf.ObterPorCpf(_cpf);
 			Assert.NotNull(colaboradorExistente);
 
-			// Extrair os tipos corretos
-			DateOnly dataNascimento = colaboradorExistente.DataNascimento;
-			EColaboradorTipo tipo = colaboradorExistente.Tipo;
-
-			// Criar colaborador atualizado
+			// criar novo colaborador com os mesmos dados, editando o que quiser
 			var colaboradorAtualizado = Colaborador.Criar(
-				nome: "zé dos testes 123",
-				cpf: colaboradorExistente.Cpf,
-				dataNascimento: dataNascimento,
-				telefone: colaboradorExistente.Telefone,
-				email: colaboradorExistente.Email,
-				logradouro: colaboradorExistente.Endereco,
-				numero: colaboradorExistente.Numero,
-				complemento: colaboradorExistente.Complemento,
-				senha: colaboradorExistente.Senha,
-				foto: arquivo,
-				dataAdmissao: colaboradorExistente.DataAdmissao,
-				tipoColaborador: tipo,
-				vinculo: colaboradorExistente.Vinculo
+			colaboradorExistente.DataAdmissao,
+			colaboradorExistente.Tipo,
+			colaboradorExistente.Vinculo,
+			colaboradorExistente.Cpf,
+			"zé dos testes 123",
+			colaboradorExistente.DataNascimento,
+			colaboradorExistente.Email,
+			colaboradorExistente.Telefone,
+			colaboradorExistente.Senha,
+			arquivo,
+			colaboradorExistente.Endereco,
+			colaboradorExistente.Numero,
+			colaboradorExistente.Complemento
 			);
+			// Usar reflexão para definir o ID
 
-			// Ajustar o ID via reflexão
 			var idProperty = typeof(Entity).GetProperty("Id");
-			idProperty?.SetValue(colaboradorAtualizado, colaboradorExistente.Id);
 
-			// Atualizar no repositório
-			var resultadoAtualizacao = await repoColaborador.Atualizar(colaboradorAtualizado);
+			idProperty?.SetValue(colaboradorAtualizado, colaboradorExistente.Id);
+			// Teste de Atualização
+
+			var repoColaboradorAtualizar = new ColaboradorRepository(ConnectionString, DatabaseType);
+			var resultadoAtualizacao = await repoColaboradorAtualizar.Atualizar(colaboradorAtualizado);
 			Assert.NotNull(resultadoAtualizacao);
 
 			Assert.Equal("zé dos testes 123", resultadoAtualizacao.Nome);
+
 		}
 
 
@@ -96,7 +94,7 @@ namespace AcademiaDoZe.Infrastructure.Tests
 		public async Task Colaborador_ObterPorCpf_TrocarSenha()
 		{
 			var _cpf = "12345678900";
-			Arquivo arquivo = Arquivo.Criar(new byte[] { 1, 2, 3 }, "jpg");
+			Arquivo arquivo = Arquivo.Criar(new byte[] { 1, 2, 3 });
 			var repoColaboradorObterPorCpf = new ColaboradorRepository(ConnectionString, DatabaseType);
 			var colaboradorExistente = await repoColaboradorObterPorCpf.ObterPorCpf(_cpf);
 			Assert.NotNull(colaboradorExistente);

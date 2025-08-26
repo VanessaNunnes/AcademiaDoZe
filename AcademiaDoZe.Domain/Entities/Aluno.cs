@@ -50,16 +50,16 @@ public class Aluno : Pessoa
 		Senha = novaSenha;
 	}
 
-	public static Aluno Criar(string cpf,
-							  string nome,
+	public static Aluno Criar(string nome,
+							  string cpf,
 							  DateOnly dataNascimento,
-							  string email,
 							  string telefone,
-							  string senha,
-							  Arquivo foto,
+							  string email,
 							  Logradouro logradouro,
 							  string numero,
-							  string complemento)
+							  string complemento,
+							  string senha,
+							  Arquivo foto)
 	{
 		return new Aluno(nome, cpf, dataNascimento, telefone, email, logradouro, numero, complemento, senha, foto);
 	}

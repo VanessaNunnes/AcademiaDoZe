@@ -13,10 +13,10 @@ namespace AcademiaDoZe.Infrastructure.Tests
 		[Fact]
 		public async Task Logradouro_Adicionar()
 		{
-			var _cep = "12345678";
+			var _cep = "12345679";
 			// Adicionar
 
-			var logradouro = Logradouro.Criar(_cep, "Rua dos Testes", "Bairro Teste", "Cidade Teste", "TS", "Pais teste");
+			var logradouro = Logradouro.Criar("Rua dos Testes", _cep, "Bairro Teste", "SC", "TS", "Pais teste");
 
 			var repoLogradouroAdd = new LogradouroRepository(ConnectionString, DatabaseType);
 			var logradouroInserido = await repoLogradouroAdd.Adicionar(logradouro);
@@ -36,7 +36,7 @@ namespace AcademiaDoZe.Infrastructure.Tests
 			Assert.NotNull(logradouroPorCep);
 
 			// Atualizar
-			var logradouroAtualizado = Logradouro.Criar(_cep, "Rua Atualizada", "Bairro Atualizado", "Cidade Atualizada", "AT", "Pais atualizado");
+			var logradouroAtualizado = Logradouro.Criar("Rua Atualizada", _cep, "Bairro Teste Att", "AT", "TS", "Pais testeAtt");
 
 			// reflexão para definir o ID
 
@@ -54,24 +54,38 @@ namespace AcademiaDoZe.Infrastructure.Tests
 		[Fact]
 		public async Task Logradouro_ObterPorCep_Remover_ObterPorId()
 		{
-			var _cep = "12345678";
+			var _cep = "99999998"; // CEP único para o teste
+
+			// Criar logradouro
+			var logradouroParaAdicionar = Logradouro.Criar(
+				"Rua Teste Remover",
+				_cep,
+				"Bairro Teste",
+				"SC",
+				"TS",
+				"Pais Teste"
+			);
+
+			var repoAdd = new LogradouroRepository(ConnectionString, DatabaseType);
+			var logradouroInserido = await repoAdd.Adicionar(logradouroParaAdicionar);
+			Assert.NotNull(logradouroInserido);
+
 			// ObterPorCep
-
-			var repoLogradouroBuscaCep = new LogradouroRepository(ConnectionString, DatabaseType);
-
-			var logradouroPorCep = await repoLogradouroBuscaCep.ObterPorCep(_cep);
+			var repoBuscaCep = new LogradouroRepository(ConnectionString, DatabaseType);
+			var logradouroPorCep = await repoBuscaCep.ObterPorCep(_cep);
 			Assert.NotNull(logradouroPorCep);
 
 			// Remover
-			var repoLogradouroDel = new LogradouroRepository(ConnectionString, DatabaseType);
-			var resultadoRemocao = await repoLogradouroDel.Remover(logradouroPorCep.Id);
+			var repoRemover = new LogradouroRepository(ConnectionString, DatabaseType);
+			var resultadoRemocao = await repoRemover.Remover(logradouroPorCep.Id);
 			Assert.True(resultadoRemocao);
 
 			// ObterPorId
-			var repoLogradouroPorId = new LogradouroRepository(ConnectionString, DatabaseType);
-			var logradouroRemovido = await repoLogradouroPorId.ObterPorId(logradouroPorCep.Id);
+			var repoPorId = new LogradouroRepository(ConnectionString, DatabaseType);
+			var logradouroRemovido = await repoPorId.ObterPorId(logradouroPorCep.Id);
 			Assert.Null(logradouroRemovido);
 		}
+
 
 		[Fact]
 		public async Task Logradouro_ObterPorCidade()
