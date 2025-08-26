@@ -11,9 +11,9 @@ namespace AcademiaDoZe.Tests.Domain
 			{
 				var logradouro = Logradouro.Criar("Rua A", "12345678", "Brasil", "SP", "SP", "Centro");
 
-				var aluno = Aluno.Criar("12345678901", "João", new DateOnly(2000, 1, 1),
-										"joao@email.com", "48999999999", "senha123", null,
-										logradouro, "100", null);
+				var aluno = Aluno.Criar("João", "123456789", new DateOnly(2000, 1, 1),
+										"joao@email.com", "48999999999", logradouro, "senha123", 
+										null, "100", null);
 
 				Assert.NotNull(aluno);
 			}
@@ -24,9 +24,9 @@ namespace AcademiaDoZe.Tests.Domain
 				var logradouro = Logradouro.Criar("Rua A", "12345678", "Brasil", "SP", "SP", "Centro");
 
 				Assert.Throws<DomainException>(() =>
-					Aluno.Criar("", "João", new DateOnly(2000, 1, 1),
-								"joao@email.com", "48999999999", "senha123", null,
-								logradouro, "100", null)
+					Aluno.Criar("João", "", new DateOnly(2000, 1, 1),
+										"joao@email.com", "48999999999", logradouro, "senha123",
+										null, "100", null)
 				);
 			}
 
@@ -34,9 +34,9 @@ namespace AcademiaDoZe.Tests.Domain
 			public void CriarAluno_LogradouroNulo_DeveLancarExcecao()
 			{
 				Assert.Throws<DomainException>(() =>
-					Aluno.Criar("12345678901", "João", new DateOnly(2000, 1, 1),
-								"joao@email.com", "48999999999", "senha123", null,
-								null!, "100", null)
+					Aluno.Criar("João", "123456789", new DateOnly(2000, 1, 1),
+										"joao@email.com", "48999999999", null, "senha123",
+										null, "100", null)
 				);
 			}
 		}
