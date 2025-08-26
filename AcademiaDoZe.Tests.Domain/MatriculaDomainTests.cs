@@ -32,7 +32,7 @@ namespace AcademiaDoZe.Tests.Domain
 		public void CriarMatricula_AlunoMenor12_DeveLancarExcecao()
 		{
 			var logradouro = Logradouro.Criar("Rua A", "12345678", "Brasil", "SP", "SP", "Centro");
-			var aluno = Aluno.Criar("João", "123456789", new DateOnly(2000, 1, 1),
+			var aluno = Aluno.Criar("João", "123456789", DateOnly.FromDateTime(DateTime.Now.AddYears(-10)),
 										"joao@email.com", "48999999999", logradouro, "senha123",
 										null, "100", null);
 
