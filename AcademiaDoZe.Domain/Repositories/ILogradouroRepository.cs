@@ -1,4 +1,5 @@
-﻿using AcademiaDoZe.Domain.Entities;
+﻿//Vanessa Furtado Nunes
+using AcademiaDoZe.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

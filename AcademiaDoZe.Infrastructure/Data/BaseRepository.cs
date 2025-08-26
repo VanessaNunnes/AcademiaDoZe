@@ -1,4 +1,5 @@
-﻿using AcademiaDoZe.Domain.Entities;
+﻿//Vanessa Furtado Nunes
+using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Infrastructure_.Exceptions;
 using System.Data.Common;
 using System.Data;

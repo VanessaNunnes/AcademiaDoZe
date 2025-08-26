@@ -1,4 +1,5 @@
-﻿using AcademiaDoZe.Infrastructure_.Exceptions;
+﻿//Vanessa Furtado Nunes
+using AcademiaDoZe.Infrastructure_.Exceptions;
 using Microsoft.Data.SqlClient;
 using MySql.Data.MySqlClient;
 using System.Data.Common;

@@ -1,4 +1,5 @@
-﻿using AcademiaDoZe.Domain.Entities;
+﻿//Vanessa Furtado Nunes
+using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Domain.ValueObject;
 using AcademiaDoZe.Infrastructure_.Data;
 using AcademiaDoZe.Infrastructure_.Repositories;

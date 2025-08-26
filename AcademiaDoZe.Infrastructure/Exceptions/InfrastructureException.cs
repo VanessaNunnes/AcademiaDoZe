@@ -1,4 +1,5 @@
-﻿namespace AcademiaDoZe.Infrastructure_.Exceptions
+﻿//Vanessa Furtado Nunes
+namespace AcademiaDoZe.Infrastructure_.Exceptions
 {
 	public class InfrastructureException : Exception
 	{
