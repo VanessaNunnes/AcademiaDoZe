@@ -10,6 +10,25 @@ namespace AcademiaDoZe.Infrastructure_.Repositories
 	public class LogradouroRepository : BaseRepository<Logradouro>, ILogradouroRepository
 	{
 		public LogradouroRepository(string connectionString, DatabaseType databaseType) : base(connectionString, databaseType) { }
+		protected override async Task<Logradouro> MapAsync(DbDataReader reader)
+		{
+			try
+			{
+				var logradouro = Logradouro.Criar(
+				id: Convert.ToInt32(reader["id_logradouro"]),
+				cep: reader["cep"].ToString()!,
+				nome: reader["nome"].ToString()!,
+				bairro: reader["bairro"].ToString()!,
+				cidade: reader["cidade"].ToString()!,
+				estado: reader["estado"].ToString()!,
+				pais: reader["pais"].ToString()!);
+				// Usando reflexão para definir o ID, já que a propriedade Id é herdada e não tem setter público
+				var idProperty = typeof(Entity).GetProperty("Id");
+				idProperty?.SetValue(logradouro, Convert.ToInt32(reader["id_logradouro"]));
+				return logradouro;
+			}
+			catch (DbException ex) { throw new InvalidOperationException($"Erro ao mapear dados do logradouro: {ex.Message}", ex); }
+		}
 		public override async Task<Logradouro> Adicionar(Logradouro entity)
 		{
 			try
@@ -41,6 +60,22 @@ namespace AcademiaDoZe.Infrastructure_.Repositories
 			}
 			catch (DbException ex) { throw new InvalidOperationException($"ERRO_ADD_LOGRADOURO", ex); }
 		}
+		public async Task<Logradouro?> ObterPorCep(string cep)
+		{
+			// Garante que o CEP está no formato correto (apenas dígitos)
+			cep = new string(cep.Where(char.IsDigit).ToArray());
+			try
+			{
+				await using var connection = await GetOpenConnectionAsync();
+				string query = $"SELECT * FROM {TableName} WHERE cep = @Cep";
+				await using var command = DbProvider.CreateCommand(query, connection);
+				command.Parameters.Add(DbProvider.CreateParameter("@Cep", cep, DbType.String, _databaseType));
+				using var reader = await command.ExecuteReaderAsync();
+				return await reader.ReadAsync() ? await MapAsync(reader) : null;
+			}
+			catch (DbException ex) { throw new InvalidOperationException($"ERRO_OBTER_LOGRADOURO_POR_CEP_{cep}", ex); }
+		}
+
 		public override async Task<Logradouro> Atualizar(Logradouro entity)
 		{
 			try
@@ -71,22 +106,6 @@ namespace AcademiaDoZe.Infrastructure_.Repositories
 			}
 			catch (DbException ex) { throw new InvalidOperationException($"ERRO_UPDATE_LOGRADOURO", ex); }
 		}
-
-		public async Task<Logradouro?> ObterPorCep(string cep)
-		{
-			// Garante que o CEP está no formato correto (apenas dígitos)
-			cep = new string(cep.Where(char.IsDigit).ToArray());
-			try
-			{
-				await using var connection = await GetOpenConnectionAsync();
-				string query = $"SELECT * FROM {TableName} WHERE cep = @Cep";
-				await using var command = DbProvider.CreateCommand(query, connection);
-				command.Parameters.Add(DbProvider.CreateParameter("@Cep", cep, DbType.String, _databaseType));
-				using var reader = await command.ExecuteReaderAsync();
-				return await reader.ReadAsync() ? await MapAsync(reader) : null;
-			}
-			catch (DbException ex) { throw new InvalidOperationException($"ERRO_OBTER_LOGRADOURO_POR_CEP_{cep}", ex); }
-		}
 		public async Task<IEnumerable<Logradouro>> ObterPorCidade(string cidade)
 		{
 			try
@@ -104,25 +123,6 @@ namespace AcademiaDoZe.Infrastructure_.Repositories
 				return logradouros;
 			}
 			catch (DbException ex) { throw new InvalidOperationException($"ERRO_OBTER_LOGRADOURO_POR_CIDADE_{cidade}", ex); }
-		}
-
-		protected override async Task<Logradouro> MapAsync(DbDataReader reader)
-		{
-			try
-			{
-				var logradouro = Logradouro.Criar(
-				cEP: reader["cep"].ToString()!,
-				nomeLogradouro: reader["nome"].ToString()!,
-				bairro: reader["bairro"].ToString()!,
-				cidade: reader["cidade"].ToString()!,
-				estado: reader["estado"].ToString()!,
-				pais: reader["pais"].ToString()!);
-				// Usando reflexão para definir o ID, já que a propriedade Id é herdada e não tem setter público
-				var idProperty = typeof(Entity).GetProperty("Id");
-				idProperty?.SetValue(logradouro, Convert.ToInt32(reader["id_logradouro"]));
-				return logradouro;
-			}
-			catch (DbException ex) { throw new InvalidOperationException($"Erro ao mapear dados do logradouro: {ex.Message}", ex); }
 		}
 	}
 }

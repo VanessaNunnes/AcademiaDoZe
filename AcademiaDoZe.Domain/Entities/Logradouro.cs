@@ -6,53 +6,46 @@ namespace AcademiaDoZe.Domain.Entities;
 
 public sealed class Logradouro : Entity
 {
-    public string Cep { get; }
-    public string Nome { get; }
-    public string Bairro { get; }
-    public string Cidade { get; }
-    public string Estado { get; }
-    public string Pais { get; }
-    public Logradouro(string cep,
-    string nome,
-    string bairro,
-    string cidade,
-    string estado,
-    string pais) : base()
-
-    {
-        Cep = cep;
-        Nome = nome;
-        Bairro = bairro;
-        Cidade = cidade;
-        Estado = estado;
-        Pais = pais;
-	}
-
-	public static Logradouro Criar(string nomeLogradouro, string cEP, string pais, string estado, string cidade, string bairro)
+	// encapsulamento das propriedades, aplicando imutabilidade
+	public string Cep { get; }
+	public string Nome { get; }
+	public string Bairro { get; }
+	public string Cidade { get; }
+	public string Estado { get; }
+	public string Pais { get; }
+	// construtor privado para evitar instância direta
+	private Logradouro(int id, string cep, string nome, string bairro, string cidade, string estado, string pais) : base(id)
 	{
-		cEP = TextoNormalizadoService.LimparEDigitos(cEP);
-		nomeLogradouro = TextoNormalizadoService.LimparEspacos(nomeLogradouro);
-		pais = TextoNormalizadoService.LimparEspacos(pais);
-		estado = TextoNormalizadoService.LimparTodosEspacos(estado);
-		cidade = TextoNormalizadoService.LimparEspacos(cidade);
+		Id = id;
+		Cep = cep;
+		Nome = nome;
+		Bairro = bairro;
+		Cidade = cidade;
+		Estado = estado;
+		Pais = pais;
+	}
+	// método de fábrica, ponto de entrada para criar um objeto válido e normalizado
+	public static Logradouro Criar(int id, string cep, string nome, string bairro, string cidade, string estado, string pais)
+	{
+		// Validações e normalizações
+
+		if (TextoNormalizadoService.TextoVazioOuNulo(cep)) throw new DomainException("CEP_OBRIGATORIO");
+
+		cep = TextoNormalizadoService.LimparEDigitos(cep);
+		if (cep.Length != 8) throw new DomainException("CEP_DIGITOS");
+		if (TextoNormalizadoService.TextoVazioOuNulo(nome)) throw new DomainException("NOME_OBRIGATORIO");
+		nome = TextoNormalizadoService.LimparEspacos(nome);
+		if (TextoNormalizadoService.TextoVazioOuNulo(bairro)) throw new DomainException("BAIRRO_OBRIGATORIO");
 		bairro = TextoNormalizadoService.LimparEspacos(bairro);
+		if (TextoNormalizadoService.TextoVazioOuNulo(cidade)) throw new DomainException("CIDADE_OBRIGATORIO");
+		cidade = TextoNormalizadoService.LimparEspacos(cidade);
+		if (TextoNormalizadoService.TextoVazioOuNulo(estado)) throw new DomainException("ESTADO_OBRIGATORIO");
+		estado = TextoNormalizadoService.ParaMaiusculo(TextoNormalizadoService.LimparTodosEspacos(estado));
+		if (TextoNormalizadoService.TextoVazioOuNulo(pais)) throw new DomainException("PAIS_OBRIGATORIO");
+		pais = TextoNormalizadoService.LimparEspacos(pais);
+		// criação e retorno do objeto
 
-		if (string.IsNullOrWhiteSpace(nomeLogradouro))
-			throw new DomainException("Nome do logradouro não pode ser vazio.");
-		if (string.IsNullOrWhiteSpace(cEP))
-			throw new DomainException("CEP não pode ser vazio.");
-		if (cEP.Length != 8)
-			throw new DomainException("CEP deve conter 8 dígitos.");
-		if (string.IsNullOrWhiteSpace(pais))
-			throw new DomainException("País não pode ser vazio.");
-		if (string.IsNullOrWhiteSpace(estado))
-			throw new DomainException("Estado não pode ser vazio.");
-		if (string.IsNullOrWhiteSpace(cidade))
-			throw new DomainException("Cidade não pode ser vazia.");
-		if (string.IsNullOrWhiteSpace(bairro))
-			throw new DomainException("Bairro não pode ser vazio.");
-
-		return new Logradouro(cEP, nomeLogradouro, bairro, cidade, estado, pais);
+		return new Logradouro(id, cep, nome, bairro, cidade, estado, pais);
 
 	}
 }

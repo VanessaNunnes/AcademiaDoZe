@@ -13,6 +13,38 @@ namespace AcademiaDoZe.Infrastructure_.Repositories
 	{
 		public ColaboradorRepository(string connectionString, DatabaseType databaseType) : base(connectionString, databaseType) { }
 
+		protected override async Task<Colaborador> MapAsync(DbDataReader reader)
+		{
+			try
+			{
+				// Obtém o logradouro de forma assíncrona
+				var logradouroId = Convert.ToInt32(reader["logradouro_id"]);
+				var logradouroRepository = new LogradouroRepository(_connectionString, _databaseType);
+				var logradouro = await logradouroRepository.ObterPorId(logradouroId) ?? throw new InvalidOperationException($"Logradouro com ID {logradouroId} não encontrado.");
+				// Cria o objeto Colaborador usando o método de fábrica
+				var colaborador = Colaborador.Criar(
+				id: reader["id_colaborador"] is DBNull ? 0 : Convert.ToInt32(reader["id_colaborador"]),
+				cpf: reader["cpf"].ToString()!,
+				telefone: reader["telefone"].ToString()!,
+				nome: reader["nome"].ToString()!,
+				dataNascimento: DateOnly.FromDateTime(Convert.ToDateTime(reader["nascimento"])),
+				email: reader["email"].ToString()!,
+				endereco: logradouro,
+				numero: reader["numero"].ToString()!,
+				complemento: reader["complemento"]?.ToString(),
+				senha: reader["senha"].ToString()!,
+				foto: reader["foto"] is DBNull ? null : Arquivo.Criar((byte[])reader["foto"]),
+				dataAdmissao: DateOnly.FromDateTime(Convert.ToDateTime(reader["admissao"])),
+				tipo: (EColaboradorTipo)Convert.ToInt32(reader["tipo"]),
+				vinculo: (EColaboradorVinculo)Convert.ToInt32(reader["vinculo"])
+				);
+				// Define o ID usando reflection
+				var idProperty = typeof(Entity).GetProperty("Id");
+				idProperty?.SetValue(colaborador, Convert.ToInt32(reader["id_colaborador"]));
+				return colaborador;
+			}
+			catch (DbException ex) { throw new InvalidOperationException($"Erro ao mapear dados do colaborador: {ex.Message}", ex); }
+		}
 		public override async Task<Colaborador> Adicionar(Colaborador entity)
 		{
 			try
@@ -49,6 +81,19 @@ namespace AcademiaDoZe.Infrastructure_.Repositories
 				return entity;
 			}
 			catch (DbException ex) { throw new InvalidOperationException($"Erro ao adicionar colaborador: {ex.Message}", ex); }
+		}
+		public async Task<Colaborador?> ObterPorCpf(string cpf)
+		{
+			try
+			{
+				await using var connection = await GetOpenConnectionAsync();
+				string query = $"SELECT * FROM {TableName} WHERE cpf = @Cpf";
+				await using var command = DbProvider.CreateCommand(query, connection);
+				command.Parameters.Add(DbProvider.CreateParameter("@Cpf", cpf, DbType.String, _databaseType));
+				using var reader = await command.ExecuteReaderAsync();
+				return await reader.ReadAsync() ? await MapAsync(reader) : null;
+			}
+			catch (DbException ex) { throw new InvalidOperationException($"Erro ao obter colaborador pelo CPF {cpf}: {ex.Message}", ex); }
 		}
 		public override async Task<Colaborador> Atualizar(Colaborador entity)
 		{
@@ -97,21 +142,6 @@ namespace AcademiaDoZe.Infrastructure_.Repositories
 				throw new InvalidOperationException($"Erro ao atualizar colaborador com ID {entity.Id}: {ex.Message}", ex);
 			}
 		}
-
-		public async Task<Colaborador?> ObterPorCpf(string cpf)
-		{
-			try
-			{
-				await using var connection = await GetOpenConnectionAsync();
-				string query = $"SELECT * FROM {TableName} WHERE cpf = @Cpf";
-				await using var command = DbProvider.CreateCommand(query, connection);
-				command.Parameters.Add(DbProvider.CreateParameter("@Cpf", cpf, DbType.String, _databaseType));
-				using var reader = await command.ExecuteReaderAsync();
-				return await reader.ReadAsync() ? await MapAsync(reader) : null;
-			}
-			catch (DbException ex) { throw new InvalidOperationException($"Erro ao obter colaborador pelo CPF {cpf}: {ex.Message}", ex); }
-		}
-
 		public async Task<bool> CpfJaExiste(string cpf, int? id = null)
 		{
 			try
@@ -152,38 +182,6 @@ namespace AcademiaDoZe.Infrastructure_.Repositories
 			{
 				throw new InvalidOperationException($"Erro ao trocar senha do colaborador ID {id}: {ex.Message}", ex);
 			}
-		}
-
-		protected override async Task<Colaborador> MapAsync(DbDataReader reader)
-		{
-			try
-			{
-				// Obtém o logradouro de forma assíncrona
-				var logradouroId = Convert.ToInt32(reader["logradouro_id"]);
-				var logradouroRepository = new LogradouroRepository(_connectionString, _databaseType);
-				var logradouro = await logradouroRepository.ObterPorId(logradouroId) ?? throw new InvalidOperationException($"Logradouro com ID {logradouroId} não encontrado.");
-				// Cria o objeto Colaborador usando o método de fábrica
-				var colaborador = Colaborador.Criar(
-				cpf: reader["cpf"].ToString()!,
-				telefone: reader["telefone"].ToString()!,
-				nome: reader["nome"].ToString()!,
-				dataNascimento: DateOnly.FromDateTime(Convert.ToDateTime(reader["nascimento"])),
-				email: reader["email"].ToString()!,
-				logradouro: logradouro,
-				numero: reader["numero"].ToString()!,
-				complemento: reader["complemento"]?.ToString(),
-				senha: reader["senha"].ToString()!,
-				foto: reader["foto"] is DBNull ? null : Arquivo.Criar((byte[])reader["foto"]),
-				dataAdmissao: DateOnly.FromDateTime(Convert.ToDateTime(reader["admissao"])),
-				tipoColaborador: (EColaboradorTipo)Convert.ToInt32(reader["tipo"]),
-				vinculo: (EColaboradorVinculo)Convert.ToInt32(reader["vinculo"])
-				);
-				// Define o ID usando reflection
-				var idProperty = typeof(Entity).GetProperty("Id");
-				idProperty?.SetValue(colaborador, Convert.ToInt32(reader["id_colaborador"]));
-				return colaborador;
-			}
-			catch (DbException ex) { throw new InvalidOperationException($"Erro ao mapear dados do colaborador: {ex.Message}", ex); }
 		}
 	}
 }
