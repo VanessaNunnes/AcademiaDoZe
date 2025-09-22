@@ -6,38 +6,38 @@
 //{
 //	public class AlunoDomainTests
 //	{
-//			[Fact]
-//			public void CriarAluno_Valido_NaoDeveLancarExcecao()
-//			{
-//				var logradouro = Logradouro.Criar("Rua A", "12345678", "Brasil", "SP", "SP", "Centro");
+//		[Fact]
+//		public void CriarAluno_Valido_NaoDeveLancarExcecao()
+//		{
+//			var logradouro = Logradouro.Criar("Rua A", "12345678", "Brasil", "SP", "SP", "Centro");
 
-//				var aluno = Aluno.Criar("João", "123456789", new DateOnly(2000, 1, 1),
-//										"joao@email.com", "48999999999", logradouro, "senha123", 
-//										null, "100", null);
+//			var aluno = Aluno.Criar("João", "123456789", new DateOnly(2000, 1, 1),
+//									"joao@email.com", "48999999999", logradouro, "senha123",
+//									null, "100", null);
 
-//				Assert.NotNull(aluno);
-//			}
+//			Assert.NotNull(aluno);
+//		}
 
-//			[Fact]
-//			public void CriarAluno_CpfVazio_DeveLancarExcecao()
-//			{
-//				var logradouro = Logradouro.Criar("Rua A", "12345678", "Brasil", "SP", "SP", "Centro");
+//		[Fact]
+//		public void CriarAluno_CpfVazio_DeveLancarExcecao()
+//		{
+//			var logradouro = Logradouro.Criar("Rua A", "12345678", "Brasil", "SP", "SP", "Centro");
 
-//				Assert.Throws<DomainException>(() =>
-//					Aluno.Criar("João", "", new DateOnly(2000, 1, 1),
-//										"joao@email.com", "48999999999", logradouro, "senha123",
-//										null, "100", null)
-//				);
-//			}
+//			Assert.Throws<DomainException>(() =>
+//				Aluno.Criar("João", "", new DateOnly(2000, 1, 1),
+//									"joao@email.com", "48999999999", logradouro, "senha123",
+//									null, "100", null)
+//			);
+//		}
 
-//			[Fact]
-//			public void CriarAluno_LogradouroNulo_DeveLancarExcecao()
-//			{
-//				Assert.Throws<DomainException>(() =>
-//					Aluno.Criar("João", "123456789", new DateOnly(2000, 1, 1),
-//										"joao@email.com", "48999999999", null, "senha123",
-//										null, "100", null)
-//				);
-//			}
+//		[Fact]
+//		public void CriarAluno_LogradouroNulo_DeveLancarExcecao()
+//		{
+//			Assert.Throws<DomainException>(() =>
+//				Aluno.Criar("João", "123456789", new DateOnly(2000, 1, 1),
+//									"joao@email.com", "48999999999", null, "senha123",
+//									null, "100", null)
+//			);
 //		}
 //	}
+//}

@@ -1,4 +1,5 @@
-﻿using AcademiaDoZe.Presentation.AppMauii.ViewModels;
+﻿using AcademiaDoZe.Presentation.AppMauii.Configuration;
+using AcademiaDoZe.Presentation.AppMauii.ViewModels;
 using AcademiaDoZe.Presentation.AppMauii.Views;
 using Microsoft.Extensions.Logging;
 
@@ -16,6 +17,8 @@ namespace AcademiaDoZe.Presentation.AppMauii
 					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 					fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
 				});
+
+			ConfigurationHelper.ConfigureServices(builder.Services);
 
 			builder.Services.AddTransient<DashboardListViewModel>();
 			builder.Services.AddTransient<LogradouroListViewModel>();

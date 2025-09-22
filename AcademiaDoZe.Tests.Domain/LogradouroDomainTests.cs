@@ -15,7 +15,7 @@
 //		public void CriarLogradouro_Valido_NaoDeveLancarExcecao()
 //		{
 //			var logradouro = Logradouro.Criar(1, "Casa", "12345678", "Brasil", "SP", "SP", "Centro");
-//			Assert.NotNull(logradouro); 
+//			Assert.NotNull(logradouro);
 //		}
 
 //		[Fact]
@@ -28,7 +28,7 @@
 //		public void CriarLogradouro_Valido_VerificarNormalizado()
 //		{
 //			var logradouro = Logradouro.Criar("Casa  ", "1234./567-8", "  Brasil  ", "S P", " SP ", "  Centro");
-//			Assert.Equal("12345678", logradouro.Cep); 
+//			Assert.Equal("12345678", logradouro.Cep);
 //			Assert.Equal("Casa", logradouro.Nome);
 //			Assert.Equal("Centro", logradouro.Bairro);
 //			Assert.Equal("SP", logradouro.Cidade);
