@@ -16,6 +16,7 @@ namespace AcademiaDoZe.Presentation.AppMauii
 				{
 					fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
 					fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+					fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIcons");
 				});
 
 			ConfigurationHelper.ConfigureServices(builder.Services);
@@ -27,6 +28,7 @@ namespace AcademiaDoZe.Presentation.AppMauii
 			builder.Services.AddTransient<DashboardListPage>();
 			builder.Services.AddTransient<LogradouroListPage>();
 			builder.Services.AddTransient<LogradouroPage>();
+			builder.Services.AddTransient<ConfigPage>();
 
 #if DEBUG
 			builder.Logging.AddDebug();
