@@ -30,6 +30,9 @@
         <ShellContent ContentTemplate="{DataTemplate views:ConfigPage}" Route="configuracoes"/>
     </FlyoutItem>
     <FlyoutItem Title="Colaboradores">
+        <FlyoutItem.Icon>
+            <FontImageSource FontFamily="MaterialIcons" Glyph="&#xea67;" />
+        </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate views:ColaboradorListPage}" Route="colaboradores" />
     </FlyoutItem>
 </Shell>
