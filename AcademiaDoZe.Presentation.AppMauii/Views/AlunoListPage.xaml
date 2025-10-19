@@ -124,7 +124,7 @@ VerticalOptions="Center"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.EmptyView>
                         <StackLayout VerticalOptions="Center">
-                            <Label Text="Nenhum colaborador encontrado" HorizontalOptions="Center" Style="{StaticResource SubHeadline}"/>
+                            <Label Text="Nenhum aluno encontrado" HorizontalOptions="Center" Style="{StaticResource SubHeadline}"/>
                             <Button Text="Adicionar Primeiro Aluno" Command="{Binding AddAlunoCommand}" Style="{StaticResource ButtonPrimary}" HeightRequest="50" Margin="0,20,0,0"/>
                         </StackLayout>
                     </CollectionView.EmptyView>
