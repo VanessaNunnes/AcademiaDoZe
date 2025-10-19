@@ -29,4 +29,7 @@
         </FlyoutItem.Icon>
         <ShellContent ContentTemplate="{DataTemplate views:ConfigPage}" Route="configuracoes"/>
     </FlyoutItem>
+    <FlyoutItem Title="Colaboradores">
+        <ShellContent ContentTemplate="{DataTemplate views:ColaboradorListPage}" Route="colaboradores" />
+    </FlyoutItem>
 </Shell>
